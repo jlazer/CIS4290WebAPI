@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using WebAPI.Entities;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace WebAPI.Services
 {
     public class GenericEFRepository : IGenericEFRepository
     {
-        private SqlDbContext _db;
-        public GenericEFRepository(SqlDbContext db)
+        private DbContext _db;
+        public GenericEFRepository(DbContext db)
         {
             _db = db;
         }
@@ -27,7 +27,7 @@ namespace WebAPI.Services
             if (entity != null && includeRelatedEntities)
             {
                 // Get the names of all DbSets in the DbContext
-                var dbsets = typeof(SqlDbContext)
+                var dbsets = typeof(DbContext)
                     .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                     .Where(z => z.PropertyType.Name.Contains("DbSet"))
                     .Select(z => z.Name);
