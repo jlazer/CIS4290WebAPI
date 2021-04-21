@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AutoMapper;
 //above using is what the documentation from Hwang has
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -74,34 +75,46 @@ namespace WebAPI
             //Entity Framework allows interaction with DB, Generics allow data types to be assigned at runtime
             services.AddScoped(typeof(IGenericEFRepository), typeof(GenericEFRepository));
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             //Using AutoMapper Package to Map Entities to DTOs AND vice versa
             //Entities represent tables in the DB
             //Data Transfer Object is used to turn entity data into a response object OR  convert request data into an entity model
-            AutoMapper.Mapper.Initialize(config =>
+
+            /*AutoMapper.Mapper.Initialize(config =>
             {
 
                 config.CreateMap<Entities.Cart, Models.CartDTO>();
                 config.CreateMap<Models.CartDTO, Entities.Cart>();
+
                 config.CreateMap<Entities.Product, Models.ProductDTO>();
                 config.CreateMap<Models.ProductDTO, Entities.Product>();
                 config.CreateMap<Entities.Product, Models.ProductUpdateDTO>();
                 config.CreateMap<Models.ProductUpdateDTO, Entities.Product>();
+
                 config.CreateMap<Models.CartUpdateDTO, Entities.Cart>();
                 config.CreateMap<Entities.Cart, Models.CartUpdateDTO>();
                 config.CreateMap<Entities.Review, Models.ReviewDTO>();
                 config.CreateMap<Models.ReviewDTO, Entities.Review>();
                 config.CreateMap<Entities.Review, Models.ReviewUpdateDTO>();
                 config.CreateMap<Models.ReviewUpdateDTO, Entities.Review>();
-            });
+            });*/
 
             // https://stackoverflow.com/questions/59713215/mapper-does-not-contain-a-definition-for-initialize-automapper-c-sharp
             // the above stackoverflow link says that mapper.initialize is obsolete and to use something similar to below. we need to adapt the below code to instantiate all of the objects above.
-            var config = new MapperConfiguration(cfg => {
-                cfg.AddProfile<AutomapperWebProfile>();
-            });
+           /* var config = new MapperConfiguration(cfg =>
+            {
+                //cfg.CreateMap<Entities.Cart, Models.CartDTO>();
+                //cfg.CreateMap<Models.CartDTO, Entities.Cart>();
 
+                cfg.CreateMap<Entities.Product, Models.ProductDTO>();
+                cfg.CreateMap<Models.ProductDTO, Entities.Product>();
+                cfg.CreateMap<Entities.Product, Models.ProductUpdateDTO>();
+                cfg.CreateMap<Models.ProductUpdateDTO, Entities.Product>();
 
-            var mapper = config.CreateMapper();
+            });*/
+            
+            //var mapper = config.CreateMapper();
         }
 
 

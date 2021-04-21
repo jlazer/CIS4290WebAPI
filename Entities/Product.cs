@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebAPI.Controllers;
+using WebAPI.Models;
 
 namespace WebAPI.Entities
 {
