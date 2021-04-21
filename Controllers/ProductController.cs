@@ -34,7 +34,7 @@ namespace WebAPI.Controllers
         [HttpGet("{productId}", Name = "GetGenericProduct")]
         public IActionResult Get(int productId)
         {
-            var reviews = _rep.Get<Product>().Where(p =>
+            var products = _rep.Get<Product>().Where(p =>
             p.ProductID.Equals(productId));
 
             var DTOs = Mapper.Map<IEnumerable<ProductDTO>>(products);

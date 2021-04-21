@@ -1,13 +1,21 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using WebAPI.Services;
+using WebAPI.Entities;
+using WebAPI.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+//above using is what the documentation from Hwang has
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
+//using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,39 +24,119 @@ namespace WebAPI
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+            var conn = Configuration["connectionStrings:sqlConnectionAPI"];
 
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
+            //SqlDbContext is our connection to the DB using our connection string from secrets.json(conn)
+            services.AddDbContext<SqlDbContext>(options =>
+                options.UseSqlServer(conn));
+            //Add Identity’s Database Context
+            services.AddDbContextPool<ApplicationDbContext>(options =>
+                            options.UseSqlServer(conn));
+
+            //Implement Identity 
+            services.AddIdentity<ApplicationUser, Microsoft.AspNetCore.Identity.IdentityRole>()
+                           .AddEntityFrameworkStores<ApplicationDbContext>()
+                           .AddDefaultTokenProviders();
+            //Add JSON Web Token Authentication
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+                    cfg.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        //Recieve JWT config info from secrets.json
+                        ValidIssuer = Configuration["JwtIssuer"],
+                        ValidAudience = Configuration["JwtIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
+                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                    };
+                });
+
+            //Entity Framework allows interaction with DB, Generics allow data types to be assigned at runtime
+            services.AddScoped(typeof(IGenericEFRepository), typeof(GenericEFRepository));
+
+            //Using AutoMapper Package to Map Entities to DTOs AND vice versa
+            //Entities represent tables in the DB
+            //Data Transfer Object is used to turn entity data into a response object OR  convert request data into an entity model
+            AutoMapper.Mapper.Initialize(config =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
+
+                config.CreateMap<Entities.Cart, Models.CartDTO>();
+                config.CreateMap<Models.CartDTO, Entities.Cart>();
+                config.CreateMap<Entities.Product, Models.ProductDTO>();
+                config.CreateMap<Models.ProductDTO, Entities.Product>();
+                config.CreateMap<Entities.Product, Models.ProductUpdateDTO>();
+                config.CreateMap<Models.ProductUpdateDTO, Entities.Product>();
+                config.CreateMap<Models.CartUpdateDTO, Entities.Cart>();
+                config.CreateMap<Entities.Cart, Models.CartUpdateDTO>();
+                config.CreateMap<Entities.Review, Models.ReviewDTO>();
+                config.CreateMap<Models.ReviewDTO, Entities.Review>();
+                config.CreateMap<Entities.Review, Models.ReviewUpdateDTO>();
+                config.CreateMap<Models.ReviewUpdateDTO, Entities.Review>();
             });
+
+            // https://stackoverflow.com/questions/59713215/mapper-does-not-contain-a-definition-for-initialize-automapper-c-sharp
+            // the above stackoverflow link says that mapper.initialize is obsolete and to use something similar to below. we need to adapt the below code to instantiate all of the objects above.
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<AutomapperWebProfile>();
+            });
+
+
+            var mapper = config.CreateMapper();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+
+
+
+
+        //the below lines were created by the original api template. if we are not using swagger we shouldnt need them.
+        
+        /*services.AddControllers();
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
+        });
+        
+     }*/
+    
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
+                //app.UseSwagger();
+                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
             }
 
-            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseMvc();
 
-            app.UseRouting();
+            //app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            //app.UseRouting();
+
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

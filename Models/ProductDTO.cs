@@ -7,7 +7,7 @@ namespace WebAPI.Models
 {
     public class ProductDTO
     {
-        public int ProductId { get; set; }
+        public int ProductID { get; set; }
         public string ProductNo { get; set; }
         public string ProductName { get; set; }
         public string ProductDesc { get; set; }
