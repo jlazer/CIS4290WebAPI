@@ -34,7 +34,9 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            //services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddControllers(options => options.EnableEndpointRouting = false);
+
             var conn = Configuration["connectionStrings:sqlConnectionAPI"];
 
             //SqlDbContext is our connection to the DB using our connection string from secrets.json(conn)
