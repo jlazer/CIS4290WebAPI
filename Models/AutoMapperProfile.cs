@@ -11,7 +11,10 @@ namespace WebAPI.Models
     {
         public AutoMapperProfile()
         {
+            CreateMap<Product, ProductDTO>();
             CreateMap<ProductDTO, Product>();
+            
+
         }
 
     }
