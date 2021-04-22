@@ -40,6 +40,7 @@ namespace WebAPI
             //SqlDbContext is our connection to the DB using our connection string from secrets.json(conn)
             services.AddDbContext<SqlDbContext>(options =>
                 options.UseSqlServer(conn));
+
             //Add Identity’s Database Context
             services.AddDbContextPool<ApplicationDbContext>(options =>
                             options.UseSqlServer(conn));
@@ -122,7 +123,7 @@ namespace WebAPI
 
 
         //the below lines were created by the original api template. if we are not using swagger we shouldnt need them.
-        
+
         /*services.AddControllers();
         services.AddSwaggerGen(c =>
         {
@@ -130,10 +131,10 @@ namespace WebAPI
         });
         
      }*/
-    
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -144,11 +145,10 @@ namespace WebAPI
 
             app.UseAuthentication();
             app.UseMvc();
+        }
 
             //app.UseHttpsRedirection();
-
             //app.UseRouting();
-
             //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
