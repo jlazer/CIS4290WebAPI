@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using WebAPI.Entities;
 using Microsoft.EntityFrameworkCore;
-using WebAPI.Entities;
 
 namespace WebAPI.Services
 {
