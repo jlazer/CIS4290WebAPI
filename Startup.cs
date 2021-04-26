@@ -37,7 +37,7 @@ namespace WebAPI
         {
             services.AddMvc(options=>
             options.EnableEndpointRouting = false);
-            var conn = Configuration["connectionStrings:sqlConnectionAPI"];
+            var conn = Configuration["connectionStrings:ConnectionStringOnlineStore"];
 
             //SqlDbContext is our connection to the DB using our connection string from secrets.json(conn)
             services.AddDbContext<SqlDbContext>(options =>

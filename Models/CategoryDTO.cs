@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using WebAPI.Controllers;
-using WebAPI.Models;
 
-namespace WebAPI.Entities
+namespace WebAPI.Models
 {
-    public class Category
+    public class CategoryDTO
     {
         public int Id { get; set; }
         public string CategoryID { get; set; }
