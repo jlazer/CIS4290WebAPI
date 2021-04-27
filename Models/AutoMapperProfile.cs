@@ -15,8 +15,8 @@ namespace WebAPI.Models
             CreateMap<ProductDTO, Product>();
             CreateMap<Cart, CartDTO>();
             CreateMap<CartDTO, Cart>();
-            
-
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<CategoryDTO, Category>();
         }
 
     }
