@@ -11,12 +11,12 @@ namespace WebAPI.Entities
 {
     public class Review
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ReviewID { get; set; }
         public int ProductID { get; set; }
-        public string ProductNo { get; set; }
-        public string ProductName { get; set; }
-        public int MainCategoryID { get; set; }
-        public int SubCategoryID { get; set; }
-        public string ProductCaption { get; set; }
-        public int ProductRating { get; set; }
+        public string UserName { get; set; }
+        public int Rating { get; set; }
+        public string UserReview { get; set; }
     }
 }

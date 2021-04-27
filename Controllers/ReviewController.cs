@@ -36,15 +36,17 @@ namespace WebAPI.Controllers
 
 
             // GET api/review/:reviewId:
-            [HttpGet("{productId}", Name = "GetGenericReview")]
-            public IActionResult Get(int productId)
+            [HttpGet("{reviewId}", Name = "GetGenericReview")]
+            public IActionResult Get(int reviewId)
             {
-                var products = _rep.Get<Review>().Where(p =>
-                p.ProductID.Equals(productId));
+                var reviews = _rep.Get<Review>().Where(p =>
+                p.ProductID.Equals(reviewId));
 
-                var DTOs = _mapper.Map<IEnumerable<ReviewDTO>>(products);
+                var DTOs = _mapper.Map<IEnumerable<ReviewDTO>>(reviews);
                 return Ok(DTOs);
             }
+
+
 
             // POST api/review
             [HttpPost]
@@ -66,6 +68,8 @@ namespace WebAPI.Controllers
             }
 
 
+
+
             // PUT api/review/:reviewId:
             [HttpPut("{id}")]
             public IActionResult Put(int id, [FromBody] ReviewUpdateDTO DTO)
@@ -83,13 +87,15 @@ namespace WebAPI.Controllers
                 return NoContent();
             }
 
-            // DELETE api/review/:reviewId:
-            [HttpDelete("{productId}")]
-            public IActionResult Delete(int productId)
-            {
-                if (!_rep.Exists<Review>(productId)) return NotFound();
 
-                var entityToDelete = _rep.Get<Review>(productId);
+
+            // DELETE api/review/:reviewId:
+            [HttpDelete("{reviewId}")]
+            public IActionResult Delete(int reviewId)
+            {
+                if (!_rep.Exists<Review>(reviewId)) return NotFound();
+
+                var entityToDelete = _rep.Get<Review>(reviewId);
 
                 _rep.Delete(entityToDelete);
 
