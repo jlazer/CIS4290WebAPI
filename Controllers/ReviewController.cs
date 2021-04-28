@@ -40,7 +40,7 @@ namespace WebAPI.Controllers
             public IActionResult Get(int reviewId)
             {
                 var reviews = _rep.Get<Review>().Where(p =>
-                p.ProductID.Equals(reviewId));
+                p.ReviewID.Equals(reviewId));
 
                 var DTOs = _mapper.Map<IEnumerable<ReviewDTO>>(reviews);
                 return Ok(DTOs);
@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
                 var createdDTO = _mapper.Map<ReviewDTO>(itemToCreate);
 
                 return CreatedAtRoute("GetGenericReview",
-                    new { productId = createdDTO.ProductID }, createdDTO);
+                    new { reviewId = createdDTO.ReviewID }, createdDTO);
             }
 
 
