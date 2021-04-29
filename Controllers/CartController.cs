@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
         public IActionResult Get()
         {
             var items = _rep.Get<Cart>();
-            var DTOs = _mapper.Map<IEnumerable<ProductDTO>>(items);
+            var DTOs = _mapper.Map<IEnumerable<CartDTO>>(items);
             return Ok(DTOs);
         }
 
