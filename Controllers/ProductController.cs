@@ -113,5 +113,15 @@ namespace WebAPI.Controllers
             return NoContent();
 
         }
+
+        [HttpGet("SubCategoryID", Name = "GetSubCategoryProduct")]
+        public IActionResult GetBySubCateogory(int SubCategory)
+        {
+            var products = _rep.Get<Product>().Where(p =>
+            p.SubCategoryID.Equals(SubCategory));
+
+            var DTOs = _mapper.Map<IEnumerable<ProductDTO>>(products);
+            return Ok(DTOs);
+        }
     }
 }
