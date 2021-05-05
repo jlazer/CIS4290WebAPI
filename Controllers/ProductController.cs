@@ -111,5 +111,16 @@ namespace WebAPI.Controllers
             var DTOs = _mapper.Map<IEnumerable<ProductDTO>>(products);
             return Ok(DTOs);
         }
+
+        [HttpGet("Featured", Name = "GetFeaturedProduct")]
+        public IActionResult GetByFeatured(int MainCategory)
+        {
+            var products = _rep.Get<Product>().Where(p =>
+            p.MainCategoryID.Equals(MainCategory) & p.FeaturedProduct.Equals(1));
+            
+
+            var DTOs = _mapper.Map<IEnumerable<ProductDTO>>(products);
+            return Ok(DTOs);
+        }
     }
 }
