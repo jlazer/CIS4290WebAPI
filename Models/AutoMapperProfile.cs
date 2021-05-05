@@ -23,6 +23,16 @@ namespace WebAPI.Models
             CreateMap<Review, ReviewDTO>();
             CreateMap<ReviewDTO, Review>();
 
+            CreateMap<Review, ReviewUpdateDTO>();
+            CreateMap<ReviewUpdateDTO, Review>();
+
+            CreateMap<Product, ProductUpdateDTO>();
+            CreateMap<ProductUpdateDTO, Product>();
+
+            CreateMap<Customer, CustomerDTO>();
+            CreateMap<CustomerDTO, Customer>();
+
+
         }
 
     }

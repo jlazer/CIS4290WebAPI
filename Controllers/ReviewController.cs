@@ -46,10 +46,21 @@ namespace WebAPI.Controllers
                 return Ok(DTOs);
             }
 
+            // GET api/review/:productId:
+            [HttpGet("{productId}", Name = "GetProductReview")]
+            public IActionResult GetByProductId(int productId)
+            {
+                var reviews = _rep.Get<Review>().Where(p =>
+                p.ProductID.Equals(productId));
+
+                var DTOs = _mapper.Map<IEnumerable<ReviewDTO>>(reviews);
+                return Ok(DTOs);
+            }
 
 
-            // POST api/review
-            [HttpPost]
+
+        // POST api/review
+        [HttpPost]
             public IActionResult Post([FromBody] ReviewDTO DTO)
             {
                 if (DTO == null) return BadRequest();

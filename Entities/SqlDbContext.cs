@@ -10,6 +10,9 @@ namespace WebAPI.Entities
         public DbSet<Review> Review { get; set; }
         public DbSet<Category> Category { get; set; }
 
+        public DbSet<Customer> Customer { get; set; }
+
+
         public SqlDbContext(DbContextOptions<SqlDbContext> options)
         : base(options)
         {
