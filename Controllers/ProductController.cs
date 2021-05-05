@@ -56,7 +56,7 @@ namespace WebAPI.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var itemToCreate = _mapper.Map<Product>(DTO);
-            System.Diagnostics.Debug.WriteLine("post product output: " + itemToCreate);
+            System.Diagnostics.Debug.WriteLine(itemToCreate);
 
             _rep.Add(itemToCreate);
 
