@@ -11,8 +11,8 @@ namespace WebAPI.Entities
 {
     public class Review
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ReviewID { get; set; }
         public int ProductID { get; set; }
         public string UserName { get; set; }

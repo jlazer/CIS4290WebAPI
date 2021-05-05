@@ -26,21 +26,7 @@ namespace WebAPI.Controllers
 
         }
 
-        // so im pretty sure the demo he provided used the entity framework stuff.
-        // im not sure if we still need to use that in order to interact with the db.
-        // GET: api/<controller>  
-        [HttpGet]
-        /*public Product Get()
-        {
-            ProductDTO productDTO = new ProductDTO()
-            {
-                Name = "Student 1",
-                Age = 25,
-                City = "New York"
-            };
-
-            return _mapper.Map<Product>(productDTO);
-        }*/
+        //This gets all products in the Product table
         // GET: api/product
         [HttpGet]
         public IActionResult Get()
@@ -65,10 +51,12 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] ProductDTO DTO)
         {
+
             if (DTO == null) return BadRequest();
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var itemToCreate = _mapper.Map<Product>(DTO);
+            System.Diagnostics.Debug.WriteLine("post product output: " + itemToCreate);
 
             _rep.Add(itemToCreate);
 
