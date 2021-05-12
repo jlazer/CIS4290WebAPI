@@ -47,7 +47,7 @@ namespace WebAPI.Controllers
             }
 
             // GET api/review/:productId:
-            [HttpGet("{productId}", Name = "GetProductReview")]
+            [HttpGet("productId", Name = "GetProductReview")]
             public IActionResult GetByProductId(int productId)
             {
                 var reviews = _rep.Get<Review>().Where(p =>
