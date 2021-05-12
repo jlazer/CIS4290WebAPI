@@ -41,7 +41,7 @@ namespace WebAPI.Controllers
         //    return Ok(DTOs);
         //}
         // GET api/customer/:Email:
-        [HttpGet("{Email}", Name = "GetCustomerEmail")]
+        [HttpGet("Email", Name = "GetCustomerEmail")]
         public IActionResult GetByEmail(string Email)
         {
             var customers = _rep.Get<Customer>().Where(p =>
