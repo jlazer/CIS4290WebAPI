@@ -35,14 +35,17 @@ namespace WebAPI.Controllers
             var DTOs = _mapper.Map<IEnumerable<ProductDTO>>(items);
             return Ok(DTOs);
         }
-
+        // This method gets product by product id provided in request url
         // GET api/product/:productId:
         [HttpGet("{productId}", Name = "GetGenericProduct")]
         public IActionResult Get(int productId)
         {
+            // create a product variable based on the product entity using the entity framework repository
+            // find products in the datbase with matching product id
             var products = _rep.Get<Product>().Where(p =>
             p.ProductID.Equals(productId));
 
+            // place the product into a data transfer object that is then serialized and sent back as a request
             var DTOs = _mapper.Map<IEnumerable<ProductDTO>>(products);
             return Ok(DTOs);
         }
@@ -51,13 +54,15 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] ProductDTO DTO)
         {
-
+            // ensure the data transfer object is valid and not empty
             if (DTO == null) return BadRequest();
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            // use automapper to mapp the dto sent to a entity of the same type
             var itemToCreate = _mapper.Map<Product>(DTO);
             System.Diagnostics.Debug.WriteLine(itemToCreate);
 
+            // add the entity to the entity framework repository
             _rep.Add(itemToCreate);
 
             if (!_rep.Save()) return StatusCode(500,

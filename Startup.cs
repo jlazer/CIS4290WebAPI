@@ -40,7 +40,7 @@ namespace WebAPI
             options.EnableEndpointRouting = false);
             // changed the connections string from the Client side DB path to the API DB path. Since the it was using client side and the client side did not have the review table it was not finding the review table.
             // this was the connectionString we were using previously "ConnectionStringOnlineStore"
-            var conn = Configuration["connectionStrings:ConnectionStringOnlineStore"];
+            var conn = Configuration["connectionStrings:sqlConnectionAPI"];
 
             //SqlDbContext is our connection to the DB using our connection string from secrets.json(conn)
             services.AddDbContext<SqlDbContext>(options =>
